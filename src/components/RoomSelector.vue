@@ -2,26 +2,35 @@
   <div>
     <h1>Select a room</h1>
     <select v-model="selectedRoom">
-      <option v-for="room in rooms" :value="room" :key="room">{{room }}</option>
+      <option v-for="room in rooms" :value="room" :key="room.name">{{ room.name }}</option>
     </select>
-    <span>Sélectionné : {{ selectedRoom }}</span>
-    <ChatRoom :roomName="selectedRoom" v-if="selectedRoom"/>
   </div>
 </template>
 
 <script>
-import ChatRoom from "@/components/ChatRoom.vue";
-
 export default {
   name: "chat",
-  components: {
-    ChatRoom
-  },
+  components: {},
   data() {
     return {
-      rooms: ["test", "super room"],
       selectedRoom: null
     };
+  },
+  watch: {
+    selectedRoom(newValue) {
+      this.$router.push({
+        name: "room",
+        params: { id: newValue.id }
+      });
+    }
+  },
+  created() {
+    this.$store.dispatch("getRoomList");
+  },
+  computed: {
+    rooms() {
+      return this.$store.state.roomList;
+    }
   }
 };
 </script>
