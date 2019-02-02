@@ -14,7 +14,6 @@ export default {
   data() {
     return {};
   },
-  created() {},
   methods: {
     next() {
       API.post(`/rooms/${this.$store.state.currentRoom.id}/queue/next`);

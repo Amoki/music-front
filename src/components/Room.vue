@@ -1,6 +1,7 @@
 <template>
   <div>
     <remote></remote>
+    <search></search>
     <h1>{{ currentRoom.name }}</h1>
     <h3 v-if="listeners > 0">Vous êtes {{listeners}} à écouter :)</h3>
     <h2 v-if="!videoId">No music</h2>
@@ -11,11 +12,13 @@
 <script>
 import { mapState } from "vuex";
 import store from "@/store";
+import Search from "@/components/Search";
 import Remote from "@/components/Remote";
 export default {
   name: "roomDetail",
   components: {
-    Remote
+    Remote,
+    Search
   },
   data() {
     return {
