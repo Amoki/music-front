@@ -53,12 +53,10 @@ export default {
           query: query
         }
       });
-      console.log(response.data);
       this.completeResults = [];
       this.searchResults = response.data;
     },
     async play(music) {
-      console.log(music);
       music.service = "youtube";
       const roomId = this.$store.state.currentRoom.id;
       await API.post(`/rooms/${roomId}/musics`, music);

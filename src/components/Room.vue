@@ -30,8 +30,6 @@ export default {
       }
     };
   },
-  created() {},
-  methods: {},
   computed: {
     ...mapState({
       currentRoom: state => state.currentRoom,
