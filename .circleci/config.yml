@@ -1,34 +1,31 @@
 version: 2
-references:
-  container_config: &container_config
-    docker:
-      - image: circleci/node:10
-
 jobs:
   build:
-    working_directory: ~/music
-    <<: *container_config
+    working_directory: ~/mern-starter
+    # The primary container is an instance of the first image listed. The job's commands run in this container.
+    docker:
+      - image: circleci/node:10
     steps:
       - checkout
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: install dependencies
-          command: npm ci
+          name: Install npm wee
+          command: npm install
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - ~/.local
-            - ~/.cache
+            - node_modules
   test:
-    <<: *container_config
+    docker:
+      - image: circleci/node:10
     steps:
       - checkout
       - run:
-          name: Unit tests
+          name: Test
           command: npm run test:unit
 
 workflows:
