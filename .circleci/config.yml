@@ -1,32 +1,38 @@
 version: 2
-jobs:
-  build:
-    working_directory: ~/mern-starter
-    # The primary container is an instance of the first image listed. The job's commands run in this container.
+references:
+  container_config: &container_config
+    working_directory: ~/music
     docker:
       - image: circleci/node:10
+
+jobs:
+  build:
+    <<: *container_config
     steps:
       - checkout
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: Install npm wee
-          command: npm install
+          name: install dependencies
+          command: npm ci
+      - run: 
+          name: test
+          command: npm run test:unit
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - node_modules
+            - ~/.npm
+            - ~/.cache
   test:
-    docker:
-      - image: circleci/node:10
+    <<: *container_config
     steps:
       - checkout
       - run:
-          name: Test
-          command: npm run test:unit
+          name: Unit tests
+          command: echo 'debug' # npm run test:unit see https://discuss.circleci.com/t/node-js-sequential-workflow-example-is-not-working/28152
 
 workflows:
   version: 2
